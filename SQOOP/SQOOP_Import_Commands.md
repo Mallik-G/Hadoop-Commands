@@ -100,7 +100,7 @@ sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --delete-target-dir \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec
  
-# Import command through Query
+### Import command through Query
 sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --username retail_dba \
 --password itversity \
@@ -109,7 +109,7 @@ sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --delete-target-dir \
 --split-by order_item_id
 
-# Import command using WHERE condition
+### Import command using WHERE condition
 sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --username retail_dba \
 --password itversity \
@@ -118,4 +118,34 @@ sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --delete-target-dir \
 --where "order_item_order_id between 1 and 10 or order_item_order_id between 100 and 10000"
 
+### Command to get the current database in HIVE
+set hive.cli.print.current.db=true;
 
+### Import the table into HIVE database (Fails if the table already exists)
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table order_items \
+--hive-import \
+--hive-database varunu28 \
+--create-hive-table
+
+### Import along with overwrite the table into HIVE database (The schema remains same if all columns not selected)
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table order_items \
+--columns "order_item_id, order_item_order_id, order_item_product_id" \
+--hive-import \
+--hive-overwrite \
+--hive-database varunu28 
+
+### Import the table into HIVE database with changing the data types
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table orders \
+--hive-import \
+--hive-overwrite \
+--hive-database varunu28 \
+--map-column-hive order_id=bigint
