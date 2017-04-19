@@ -167,3 +167,39 @@ sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --target-dir hdfs://nn01.itversity.com:8020/apps/hive/warehouse/varunu28.db/orders \
 --append \
 --fields-terminated-by '|'
+
+### Eval command to get the max order_id for incremental import. Store it in MAX_ORDER_ID
+MAX_ORDER_ID=`sqoop eval --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--query "select max(order_id) from orders" 2>/dev/null|grep "^|"|grep -v max|awk -F" " '{ print $2 }'`
+
+### Incremental Append: Base Query
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table orders \
+--target-dir hdfs://nn01.itversity.com:8020/user/varunu28/retail_db/orders \
+--append \
+--fields-terminated-by '|' \
+--where "order_id <= 60000"
+
+### Incremental Append: Update Query
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table orders \
+--target-dir hdfs://nn01.itversity.com:8020/user/varunu28/retail_db/orders \
+--append \
+--fields-terminated-by '|' \
+--check-column order_id \
+--incremental append \
+--last-value 60000
+
+### Command to create orders table in hive
+create table orders (
+order_id int,
+order_date string,
+order_customer_id int,
+order_status varchar(45))
+row format delimited fields terminated by '|';
