@@ -203,3 +203,26 @@ order_date string,
 order_customer_id int,
 order_status varchar(45))
 row format delimited fields terminated by '|';
+
+### Command to import all tables as textfile (With command to exclude a particualar table)
+sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--warehouse-dir /user/varunu28/import_all_tables \
+--exclude-tables "departments"
+
+### Command to import all tables as avrodata file (With command to exclude a particualar table)
+sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--warehouse-dir /user/varunu28/import_all_tables \
+--exclude-tables "departments"
+--as-avrodatafile
+
+### Command to import all tables as textfile to a HIVE table (With command to exclude a particualar table)
+sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--exclude-tables "orders,categories" \
+--hive-import \
+--hive-database varunu28
