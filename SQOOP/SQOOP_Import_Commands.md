@@ -149,3 +149,21 @@ sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
 --hive-overwrite \
 --hive-database varunu28 \
 --map-column-hive order_id=bigint
+
+### Importing to an existing table
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table orders \
+--hive-import \
+--hive-database varunu28 \
+--hive-table orders
+
+### Appending to an existing table (Note: Give proper delimiter)
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
+--username retail_dba \
+--password itversity \
+--table orders \
+--target-dir hdfs://nn01.itversity.com:8020/apps/hive/warehouse/varunu28.db/orders \
+--append \
+--fields-terminated-by '|'
