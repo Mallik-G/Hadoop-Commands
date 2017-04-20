@@ -1,3 +1,5 @@
+# Sqoop Import Exercises
+
 ### List databases from retail_db
 sqoop list-databases \
 --connect "jdbc:mysql://nn01.itversity.com:3306/retail_db" \
@@ -44,7 +46,8 @@ sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_d
 --fields-terminated-by '|'
 
 ### Import nyse.stocks_eod to HDFS using snappy codec compression and 8 parallel threads
-// Solution 1 by using split-by
+// Solution 1 by using split-by 
+
 sqoop import -m 8 \
 --connect "jdbc:mysql://nn01.itversity.com:3306/nyse" \
 --username nyse_ro \
@@ -55,7 +58,8 @@ sqoop import -m 8 \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec \
 --split-by tradedate
 
-// Solution 2 by giving Dorg parameter in sqoop import command
+// Solution 2 by giving Dorg parameter in sqoop import command 
+
 sqoop import "-Dorg.apache.sqoop.splitter.allow_text_splitter=true" \
 --m 8 \
 --connect "jdbc:mysql://nn01.itversity.com:3306/nyse" \
