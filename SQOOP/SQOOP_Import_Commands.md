@@ -226,3 +226,4 @@ sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_d
 --exclude-tables "orders,categories" \
 --hive-import \
 --hive-database varunu28
+
