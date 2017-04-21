@@ -227,3 +227,13 @@ sqoop import-all-tables --connect "jdbc:mysql://nn01.itversity.com:3306/retail_d
 --hive-import \
 --hive-database varunu28
 
+### SQOOP Import with null string and null non string
+sqoop import --connect "jdbc:mysql://nn01.itversity.com:3306/retail_export" \
+--username retail_dba \
+--password itversity \
+--table varunu28_departments \
+--target-dir /user/varunu28/retail_db/varunu28_departments \
+--m 1 \
+--null-string '\\N' \
+--null-non-string -1 \
+--delete-target-dir
